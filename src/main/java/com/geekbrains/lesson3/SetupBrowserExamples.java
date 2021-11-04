@@ -1,0 +1,31 @@
+package com.geekbrains.lesson3;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SetupBrowserExamples {
+    public static void main(String[] args) throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--no-sandbox") //отдельный докер-контейнер
+                .addArguments("--disable-notification") //всплывающие уведомления
+                .addArguments("user-agent=Googlebot/2.1 (+http://www.google.com/bot.html)"); //прикинуться роботом
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.get("https://google.com");
+        Thread.sleep(5000);
+//        driver.quit();
+
+        ((JavascriptExecutor)driver).executeScript("window.open()");
+        Thread.sleep(5000);
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(0));
+        Thread.sleep(5000);
+        driver.quit();
+    }
+}
